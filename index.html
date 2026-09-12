@@ -210,6 +210,45 @@
         </header>
 
         <main class="flex-1 max-w-7xl mx-auto w-full p-6 space-y-6 flex-grow">
+            
+            <!-- ACORDEÓN / BOTÓN MANUAL DE USO -->
+            <div class="bg-brand-accent/5 border border-brand-accent/30 rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between cursor-pointer" onclick="toggleManualUso()">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-brand-accent text-white rounded-lg flex items-center justify-center text-lg shadow-sm">
+                            <i class="fas fa-book-reader"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-lg text-brand-accent font-bold">📖 Manual de Uso Rápido (¡Leé esto antes de cargar datos!)</h3>
+                            <p class="text-xs text-brand-text/70">Guía paso a paso para actualizar productos, Excel y fotos sin errores.</p>
+                        </div>
+                    </div>
+                    <button class="text-brand-accent text-lg font-bold px-3 py-1 bg-white border border-brand-accent/30 rounded-lg shadow-sm">
+                        <i class="fas fa-chevron-down" id="icono-manual-flecha"></i>
+                    </button>
+                </div>
+
+                <div id="contenido-manual" class="hidden mt-6 pt-6 border-t border-brand-accent/20 grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-brand-text">
+                    <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-full bg-brand-accent text-white flex items-center justify-center font-bold">1</div>
+                        <h4 class="font-bold text-sm text-brand-accent">Carga de Excel (Productos)</h4>
+                        <p class="text-brand-text/80 leading-relaxed">Descargá la plantilla con el botón <b>"Bajar Plantilla"</b>. Cargá tus artículos respetando las columnas: <b>SKU</b> (código único), <b>PRODUCTO</b>, <b>PRECIO</b> y <b>COLORES</b> (separados por comas, ej: <i>Negro, Suela, Nude</i>). Luego subilo con <b>"Subir Excel"</b>.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-full bg-brand-accent text-white flex items-center justify-center font-bold">2</div>
+                        <h4 class="font-bold text-sm text-brand-accent">⚠️ El Secreto de las Fotos y el SKU</h4>
+                        <p class="text-brand-text/80 leading-relaxed">Para que el sistema asocie las fotos automáticamente, <b>las imágenes DEBEN llamarse exactamente igual que el SKU</b> que pusiste en el Excel (o SKU + nombre del color).<br><br><i>Ejemplo si el SKU es <b>4</b>:</i><br>• `4.jpg`<br>• `4 negro.jpg`<br>• `4 nude.jpg`</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-full bg-brand-accent text-white flex items-center justify-center font-bold">3</div>
+                        <h4 class="font-bold text-sm text-brand-accent">Subida Masiva e Inteligente</h4>
+                        <p class="text-brand-text/80 leading-relaxed">Hacé clic en <b>"Subir Fotos"</b> (el botón verde/oscuro de arriba a la derecha), seleccioná de golpe <b>todas las fotos juntas</b> de tu computadora. El sistema lee el nombre de cada archivo, busca el SKU correspondiente y las acomoda solas en cada variante de color.</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="bg-white border border-brand-border rounded-xl p-6 shadow-sm space-y-4">
                 <h3 class="font-serif text-lg text-brand-text">⚙️ Identidad y Seguridad</h3>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -347,6 +386,21 @@
     <div id="toast-container"></div>
 
     <script>
+        // Función Manual de Uso Acordeón
+        function toggleManualUso() {
+            const cont = document.getElementById('contenido-manual');
+            const icono = document.getElementById('icono-manual-flecha');
+            if (cont.classList.contains('hidden')) {
+                cont.classList.remove('hidden');
+                icono.classList.remove('fa-chevron-down');
+                icono.classList.add('fa-chevron-up');
+            } else {
+                cont.classList.add('hidden');
+                icono.classList.remove('fa-chevron-up');
+                icono.classList.add('fa-chevron-down');
+            }
+        }
+
         // Modal Utilities
         function abrirModalUI(id) { const el = document.getElementById(id); if(el){ el.classList.remove('hidden'); el.classList.add('flex'); } }
         function cerrarModal(id) { const el = document.getElementById(id); if(el){ el.classList.add('hidden'); el.classList.remove('flex'); } }
