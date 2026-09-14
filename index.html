@@ -249,17 +249,10 @@
                 </div>
             </div>
 
+            <!-- SECCIÓN SEGURIDAD (BLINDADA PARA EL CLIENTE) -->
             <div class="bg-white border border-brand-border rounded-xl p-6 shadow-sm space-y-4">
                 <h3 class="font-serif text-lg text-brand-text">⚙️ Identidad y Seguridad</h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-brand-text/70 mb-1">Nombre Tienda</label>
-                        <input type="text" id="input-nombre-tienda" class="w-full border border-brand-border p-2.5 rounded-lg text-sm outline-none focus:border-brand-accent">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-brand-text/70 mb-1">Logo (Opcional)</label>
-                        <input type="file" id="input-logo" accept="image/*" class="w-full text-xs text-brand-text file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:font-bold file:bg-brand-bg file:text-brand-text hover:file:bg-brand-border cursor-pointer transition outline-none" onchange="subirLogoApp(event)">
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-brand-text/70 mb-1">Paleta Color</label>
                         <select id="select-paleta" class="w-full border border-brand-border p-2.5 rounded-lg text-sm outline-none focus:border-brand-accent bg-white">
@@ -274,7 +267,7 @@
                         <input type="password" id="input-pin" maxlength="4" placeholder="1234" class="w-full border border-brand-border p-2.5 rounded-lg text-sm outline-none focus:border-brand-accent text-brand-accent font-bold text-center tracking-widest">
                     </div>
                 </div>
-                <div class="flex justify-end pt-2">
+                <div class="flex justify-start pt-2">
                     <button onclick="guardarConfiguracion()" class="bg-brand-text hover:bg-brand-accent text-white px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition shadow-sm">Guardar Cambios</button>
                 </div>
             </div>
@@ -518,13 +511,18 @@
             yute: { bg: '#FAF6F0', text: '#4A3B32', accent: '#CB6D3E', border: '#E6DFD5' }
         };
 
-        let db = { config: { nombre: 'Hippie Zapatos', paleta: 'suede', logo: '', pinAdmin: '1234' }, productos: [] };
+        let db = { config: {}, productos: [] };
         let seleccionActual = {}; 
 
         function initApp() {
             document.getElementById('carga-overlay').style.display = 'none';
-            if(!db.config) db.config = { nombre: 'Hippie Zapatos', paleta: 'suede', logo: '', pinAdmin: '1234' };
-            if(db.config.logo === undefined) db.config.logo = '';
+            if(!db.config) db.config = {};
+            
+            // HARDCODE ABSOLUTO DE MARCA PARA HIPPIE JAIPUR
+            db.config.nombre = 'Hippie Jaipur';
+            db.config.logo = '/icono-192x192.png';
+            
+            if(!db.config.paleta) db.config.paleta = 'suede';
             if(!db.config.pinAdmin) db.config.pinAdmin = '1234';
             
             if(db.productos.length === 0) {
@@ -552,6 +550,10 @@
         });
 
         function salvar() {
+            // Aseguramos que se guarde siempre hardcodeado
+            db.config.nombre = 'Hippie Jaipur';
+            db.config.logo = '/icono-192x192.png';
+            
             localforage.setItem('gesto_hippie_idb', db).then(() => {
                 if(typeof firestoreDb !== 'undefined' && firestoreDb) {
                     firestoreDb.collection("lite_erp").doc("catalogo_nare").set(db).catch(e => console.error("Error Firebase:", e));
@@ -579,6 +581,9 @@
                 firestoreDb.collection("lite_erp").doc("catalogo_nare").onSnapshot(doc => {
                     if(doc.exists) { 
                         db = doc.data();
+                        // Forzar hardcode en la sincronización
+                        db.config.nombre = 'Hippie Jaipur';
+                        db.config.logo = '/icono-192x192.png';
                         actualizarIdentidadVisual();
                         renderProductos(); renderStockAdmin();
                     }
@@ -599,7 +604,8 @@
             document.getElementById('page-title').innerText = `${db.config.nombre} | Catálogo Mayorista`;
             const headerBranding = document.getElementById('header-branding');
             
-            if(db.config.logo && db.config.logo.length > 100) {
+            // Verificación reducida a 5 caracteres para que acepte "/icono-192x192.png"
+            if(db.config.logo && db.config.logo.length > 5) {
                 headerBranding.innerHTML = `<div class="w-12 h-12 rounded-full border-2 border-brand-border flex items-center justify-center overflow-hidden bg-brand-bg mr-3 shrink-0"><img src="${db.config.logo}" class="w-full h-full object-cover bg-white"></div><div><h1 class="font-serif text-2xl text-brand-text leading-none">${db.config.nombre}</h1><span class="text-[10px] uppercase tracking-widest text-brand-text/60 font-bold">Venta Mayorista</span></div>`;
             } else {
                 const palabras = db.config.nombre.trim().split(' ');
@@ -607,18 +613,11 @@
                 headerBranding.innerHTML = `<div class="font-serif font-black uppercase text-brand-text leading-none text-center border-y-2 border-brand-text py-1.5 px-2 tracking-widest text-xl">${htmlLogo}</div><div class="ml-3 pl-3 border-l border-brand-border flex items-center"><span class="text-[9px] uppercase tracking-widest text-brand-text/60 font-bold leading-tight">Venta<br>Mayorista</span></div>`;
             }
             
-            document.getElementById('input-nombre-tienda').value = db.config.nombre;
             document.getElementById('select-paleta').value = db.config.paleta;
             document.getElementById('input-pin').value = db.config.pinAdmin || '1234';
         }
 
-        function subirLogoApp(e) {
-            const file = e.target.files[0]; if(!file) return;
-            comprimirImagen(file, (base64) => { db.config.logo = base64; salvar(); actualizarIdentidadVisual(); toast('Logo actualizado 🎨'); }, 300, 'image/png');
-        }
-
         function guardarConfiguracion() {
-            db.config.nombre = document.getElementById('input-nombre-tienda').value.trim() || 'Tienda';
             db.config.paleta = document.getElementById('select-paleta').value;
             db.config.pinAdmin = document.getElementById('input-pin').value.trim() || '1234';
             salvar(); actualizarIdentidadVisual(); toast('¡Configuración guardada! ✨');
@@ -862,6 +861,7 @@
                             <i class="fas fa-cloud-upload-alt mr-1"></i> Subir Foto <input type="file" accept="image/*" class="hidden" onchange="subirFotoIndividual(event, '${p.id}', ${idx})">
                         </label>
                     </div>
+                </div>
                 `;
             }).join('');
             
