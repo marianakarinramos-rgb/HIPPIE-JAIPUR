@@ -214,7 +214,7 @@
 
         <main class="flex-1 max-w-7xl mx-auto w-full p-6 space-y-6 flex-grow">
             
-            <!-- ACORDEÓN / BOTÓN MANUAL DE USO -->
+            <!-- ACORDEÓN / BOTÓN MANUAL DE USO MEJORADO -->
             <div class="bg-brand-accent/5 border border-brand-accent/30 rounded-xl p-6 shadow-sm">
                 <div class="flex items-center justify-between cursor-pointer" onclick="toggleManualUso()">
                     <div class="flex items-center gap-3">
@@ -232,22 +232,22 @@
                 </div>
 
                 <div id="contenido-manual" class="hidden mt-6 pt-6 border-t border-brand-accent/20 grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-brand-text">
-                    <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm space-y-2">
+                    <div class="bg-white p-5 rounded-xl border border-brand-border shadow-sm space-y-3">
                         <div class="w-8 h-8 rounded-full bg-brand-accent text-white flex items-center justify-center font-bold">1</div>
-                        <h4 class="font-bold text-sm text-brand-accent">Carga de Excel (Productos)</h4>
-                        <p class="text-brand-text/80 leading-relaxed">Descargá la plantilla con el botón <b>"Bajar Plantilla"</b>. Cargá tus artículos respetando las columnas: <b>SKU</b> (código único), <b>PRODUCTO</b>, <b>PRECIO</b> y <b>COLORES</b> (separados por comas, ej: <i>Negro, Suela, Nude</i>). Luego subilo con <b>"Subir Excel"</b>.</p>
+                        <h4 class="font-bold text-sm text-brand-accent">El Excel y los COLORES (¡Muy Importante!)</h4>
+                        <p class="text-brand-text/80 leading-relaxed">Descargá la plantilla con "Bajar Plantilla". Cargá SKU, PRODUCTO y PRECIO. <b>Si el zapato tiene variantes, es OBLIGATORIO escribirlas en la columna COLORES</b> separadas por coma (ej: <i>Negro, Suela, Nude</i>). Si no las escribís ahí, la clienta no podrá elegir el color al querer comprar.</p>
                     </div>
 
-                    <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm space-y-2">
+                    <div class="bg-white p-5 rounded-xl border border-brand-border shadow-sm space-y-3">
                         <div class="w-8 h-8 rounded-full bg-brand-accent text-white flex items-center justify-center font-bold">2</div>
-                        <h4 class="font-bold text-sm text-brand-accent">⚠️ El Secreto de las Fotos y el SKU</h4>
-                        <p class="text-brand-text/80 leading-relaxed">Para que el sistema asocie las fotos automáticamente, <b>las imágenes DEBEN llamarse exactamente igual que el SKU</b> que pusiste en el Excel (o SKU + nombre del color).<br><br><i>Ejemplo si el SKU es <b>4</b>:</i><br>• `4.jpg`<br>• `4 negro.jpg`<br>• `4 nude.jpg`</p>
+                        <h4 class="font-bold text-sm text-brand-accent">Opción A: Cargar fotos a mano (Recomendado)</h4>
+                        <p class="text-brand-text/80 leading-relaxed">¿No querés renegar con los nombres de los archivos? Hacé clic en el ícono del <b>Lápiz (Editar)</b> <i class="fas fa-pencil-alt text-brand-accent mx-1"></i> al lado de cualquier producto en la lista de abajo. Se abrirá una ventana donde podrás subir y cambiar la foto exacta de cada color individualmente haciendo clic en <b>"Subir Foto"</b>.</p>
                     </div>
 
-                    <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm space-y-2">
+                    <div class="bg-white p-5 rounded-xl border border-brand-border shadow-sm space-y-3">
                         <div class="w-8 h-8 rounded-full bg-brand-accent text-white flex items-center justify-center font-bold">3</div>
-                        <h4 class="font-bold text-sm text-brand-accent">Subida Masiva e Inteligente</h4>
-                        <p class="text-brand-text/80 leading-relaxed">Hacé clic en <b>"Subir Fotos"</b> (el botón verde/oscuro de arriba a la derecha), seleccioná de golpe <b>todas las fotos juntas</b> de tu computadora. El sistema lee el nombre de cada archivo, busca el SKU correspondiente y las acomoda solas en cada variante de color.</p>
+                        <h4 class="font-bold text-sm text-brand-accent">Opción B: Subida Rápida (Masiva)</h4>
+                        <p class="text-brand-text/80 leading-relaxed">Si querés subir todo de golpe con el botón "Subir Fotos", las imágenes en tu compu <b>DEBEN</b> llamarse igual que el código SKU y el color.<br><br><i>Ejemplo si el SKU es 5:</i><br>• <code>5 negro.jpg</code><br>• <code>5 animal print.jpg</code></p>
                     </div>
                 </div>
             </div>
