@@ -148,7 +148,7 @@
         </footer>
     </div>
 
-    <!-- Modal Quick View (Solo visualizador grande) -->
+    <!-- Modal Quick View -->
     <div id="modal-quick-view" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 backdrop-blur-sm z-[99999]">
         <div class="bg-white border border-brand-border rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden fade-in flex flex-col md:flex-row relative max-h-[90vh] md:max-h-[80vh]">
             <button onclick="cerrarQuickView()" class="absolute top-4 right-4 w-8 h-8 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition shadow-md z-10">
@@ -199,12 +199,15 @@
                     <span class="text-[10px] text-brand-text/60 font-bold uppercase tracking-widest">Configuración General y Matriz</span>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <button onclick="compartirTienda()" class="bg-stone-100 hover:bg-stone-200 text-brand-text border border-brand-border px-4 py-2.5 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
-                    <i class="fas fa-share-alt mr-2 text-brand-accent"></i> Compartir Link
+            <div class="flex flex-wrap gap-2">
+                <button onclick="compartirTienda()" class="hidden md:flex bg-stone-100 hover:bg-stone-200 text-brand-text border border-brand-border px-4 py-2.5 rounded-lg text-xs font-bold transition items-center shadow-sm">
+                    <i class="fas fa-share-alt mr-2 text-brand-accent"></i> Compartir
                 </button>
-                <button onclick="cerrarSesion()" class="bg-brand-accent text-white px-4 py-2.5 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
-                    <i class="fas fa-store mr-2"></i> Ir al Catálogo
+                <button onclick="abrirTiendaNuevaPestana()" class="bg-stone-100 hover:bg-stone-200 text-brand-text border border-brand-border px-4 py-2.5 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                    <i class="fas fa-external-link-alt mr-2 text-brand-accent"></i> Ver Tienda
+                </button>
+                <button onclick="cerrarSesion()" class="bg-red-50 border border-red-200 text-red-600 hover:bg-red-100 px-4 py-2.5 rounded-lg text-xs font-bold transition flex items-center shadow-sm">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Salir
                 </button>
             </div>
         </header>
@@ -412,6 +415,10 @@
             }
         }
 
+        function abrirTiendaNuevaPestana() {
+            window.open(window.location.href.split('?')[0], '_blank');
+        }
+
         function abrirModalAdmin() {
             document.getElementById('admin-pin-input').value = '';
             abrirModalUI('modal-login');
@@ -550,7 +557,6 @@
         });
 
         function salvar() {
-            // Aseguramos que se guarde siempre hardcodeado
             db.config.nombre = 'Hippie Jaipur';
             db.config.logo = '/icono-192x192.png';
             
@@ -581,7 +587,6 @@
                 firestoreDb.collection("lite_erp").doc("catalogo_nare").onSnapshot(doc => {
                     if(doc.exists) { 
                         db = doc.data();
-                        // Forzar hardcode en la sincronización
                         db.config.nombre = 'Hippie Jaipur';
                         db.config.logo = '/icono-192x192.png';
                         actualizarIdentidadVisual();
@@ -604,7 +609,6 @@
             document.getElementById('page-title').innerText = `${db.config.nombre} | Catálogo Mayorista`;
             const headerBranding = document.getElementById('header-branding');
             
-            // Verificación reducida a 5 caracteres para que acepte "/icono-192x192.png"
             if(db.config.logo && db.config.logo.length > 5) {
                 headerBranding.innerHTML = `<div class="w-12 h-12 rounded-full border-2 border-brand-border flex items-center justify-center overflow-hidden bg-brand-bg mr-3 shrink-0"><img src="${db.config.logo}" class="w-full h-full object-cover bg-white"></div><div><h1 class="font-serif text-2xl text-brand-text leading-none">${db.config.nombre}</h1><span class="text-[10px] uppercase tracking-widest text-brand-text/60 font-bold">Venta Mayorista</span></div>`;
             } else {
@@ -625,7 +629,6 @@
 
         const formatMoney = (monto) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(monto);
 
-        // --- QUICK VIEW ---
         function abrirQuickView(id) {
             const p = db.productos.find(x => x.id === id); if(!p) return;
             const state = seleccionActual[id] || { color: p.colores[0].id };
@@ -670,7 +673,6 @@
             if(labelEl) labelEl.innerText = colorNombre;
         }
 
-        // --- RENDER TIENDA ---
         function renderProductos() {
             const grid = document.getElementById('grid-productos');
             const term = document.getElementById('buscador').value.toLowerCase();
